@@ -1,33 +1,4 @@
 function [ T ] = f_dbscan( A , eps, ppcluster)
-% [ T, eps ] = f_dbscan( A , npb, ppcluster)
-% Búsqueda de clústers mediante una búsqueda previa de vecinos
-% Aplicación del algoritmo DBSCAN
-% Adrián Riquelme Guill, mayo 2013  
-% Input:
-% - A: matriz con las coordenadas de los puntos 进行聚类的数据集
-% - eps: radio para búsqueda de vecinos   半径
-% - ppcluster: n mínimo de puntos por clúster 每个cluster含有的最小数量，少于这个数我们便认为聚类出的这个 cluster 有点小，便删除
-% Output:
-% - T: clústers asignados a cada vecino T=zeros(n,1); [n,d]=size(A); 所以T为 n x 1 矩阵，第ii行的内容 表示 A中对应行的点 属于哪一个cluster
-%    Copyright (C) {2015}  {Adrián Riquelme Guill, adririquelme@gmail.com}
-%
-%    This program is free software; you can redistribute it and/or modify
-%    it under the terms of the GNU General Public License as published by
-%    the Free Software Foundation; either version 2 of the License, or
-%    any later version.
-%
-%    This program is distributed in the hope that it will be useful,
-%    but WITHOUT ANY WARRANTY; without even the implied warranty of
-%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%    GNU General Public License for more details.
-%
-%    You should have received a copy of the GNU General Public License along
-%   with this program; if not, write to the Free Software Foundation, Inc.,
-%   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-%    Discontinuity Set Extractor, Copyright (C) 2015 Adrián Riquelme Guill
-%    Discontinuity Set Extractor comes with ABSOLUTELY NO WARRANTY.
-%    This is free software, and you are welcome to redistribute it
-%    under certain conditions.
 
 [n,d]=size(A);
 h=waitbar(0,['Cluster analysis in process. ',num2str(n),' points. Please wait']);
