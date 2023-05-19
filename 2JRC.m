@@ -1,8 +1,7 @@
 clear;
 close all;
 clc;
-load JointdataN.mat;%%第1列为原始平面，第2列为旋转后的水平面，第3列为结构面id，第4列为结构面组别，第5列为为剖面中心，第6列为剖面法向量，第7列为剖面的D,...
-% 第8列为剖面线，第9列为剖面线旋转至与yoz平面平行,第10列为Z2,第11列为JRC2D.
+load JointdataN.mat;%
 for i=1:3
     m=max(cell2mat(jointdataN{i,1}(:,3)));
     for j=1:m
@@ -18,23 +17,19 @@ for i=1:3
                 d=d+c;
             end
             Z2=abs(sqrt(d/L));
-            jointdataN{i,1}{j,10}=Z2;%%第10列为Z2.
+            jointdataN{i,1}{j,10}=Z2;
             JRC2D=32.2+34.27*log10(Z2);
-            jointdataN{i,1}{j,11}=JRC2D;%%第11列为JRC2D.
+            jointdataN{i,1}{j,11}=JRC2D;
         end
     end
 end
 jointdataNnew=jointdataN;
-%插值后计算Z2及JRC
-%插值
-%load jointdataNnew.mat;%%第1列为原始平面，第2列为旋转后的水平面，第3列为结构面id，第4列为结构面组别，第5列为为剖面中心，第6列为剖面法向量，第7列为剖面的D,...
-% 第8列为剖面线，第9列为剖面线旋转至与yoz平面平行,第10列为Z2,第11列为JRC2D,第12列为排序后的y,z值,第13列为排序后插值的y,z值,第14列为插值后Z2,第15列为插值后JRC2D.
 for i=1:3
     m=max(cell2mat(jointdataNnew{i,1}(:,3)));
     for j=1:m
         if ~isempty(jointdataNnew{i,1}{j,9})
             [D,ind_D]=sortrows(jointdataNnew{i,1}{j,9},2);
-            jointdataNnew{i,1}{j,12}=D(:,2:3);%%第12列为排序后的y,z值.
+            jointdataNnew{i,1}{j,12}=D(:,2:3);
             a1=jointdataNnew{i,1}{j,12}(:,1);
             a2=jointdataNnew{i,1}{j,12}(:,2);
             maxy=max(a1);
@@ -44,12 +39,11 @@ for i=1:3
             sp=(1/50)*(maxy-miny);
             Y=miny:sp:maxy;
             Z=interp1(a1,a2,Y,"linear");
-            jointdataNnew{i,1}{j,13}(:,1)=Y;%%第13列为排序后插值的y,z值.
+            jointdataNnew{i,1}{j,13}(:,1)=Y;
             jointdataNnew{i,1}{j,13}(:,2)=Z;
         end
     end
 end
-%%插值前yz图
 figure;
 plot(jointdataNnew{2,1}{36,12}(:,1),jointdataNnew{2,1}{36,12}(:,2),'.r');
 grid on;
@@ -57,7 +51,6 @@ set(gca,'fontname','Times New Roman','fontsize',14);
 xlabel(gca,'X (m)','fontname','Times New Roman','fontsize',16 );
 ylabel(gca,'Y (m)','fontname','Times New Roman','fontsize',16 );
 axis equal;
-%%插值后yz图
 figure;
 plot(jointdataNnew{2,1}{36,13}(:,1),jointdataNnew{2,1}{36,13}(:,2),'.g');
 grid on;
@@ -65,7 +58,6 @@ set(gca,'fontname','Times New Roman','fontsize',14);
 xlabel(gca,'X (m)','fontname','Times New Roman','fontsize',16 );
 ylabel(gca,'Y (m)','fontname','Times New Roman','fontsize',16 );
 axis equal;
-%%插值前后图合在一起
 figure;
 plot(jointdataNnew{2,1}{36,12}(:,1),jointdataNnew{2,1}{36,12}(:,2),'.r',jointdataNnew{2,1}{36,13}(:,1),jointdataNnew{2,1}{36,13}(:,2),'.g');
 grid on;
@@ -73,7 +65,6 @@ set(gca,'fontname','Times New Roman','fontsize',14);
 xlabel(gca,'X (m)','fontname','Times New Roman','fontsize',16 );
 ylabel(gca,'Y (m)','fontname','Times New Roman','fontsize',16 );
 axis equal;
-%计算Z2及JRC
 for i=1:3
     m=max(cell2mat(jointdataNnew{i,1}(:,3)));
     for j=1:m
@@ -90,13 +81,12 @@ for i=1:3
                 d=d+c;
             end
             Z2=abs(sqrt(d/L));
-            jointdataNnew{i,1}{j,14}=Z2;%%第14列为插值后Z2.
+            jointdataNnew{i,1}{j,14}=Z2;
             JRC2D=32.2+34.27*log10(Z2);
-            jointdataNnew{i,1}{j,15}=JRC2D;%%第15列为插值后JRC2D.
+            jointdataNnew{i,1}{j,15}=JRC2D;
         end
     end
 end
-%将所有结构面的JRC汇总成一列
 JRC=[];
 JRNum=[];
 for i=1:3
