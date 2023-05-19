@@ -17,8 +17,6 @@ y=data(:,2);
 z=data(:,3);
 d = sqrt( x.^2 + y.^2 + z.^2);
 
-%% yz方向投影
-
 % grid construction
 yl = min(y); yr = max(y); zl = min(z); zr = max(z);
 yy = linspace(yl,yr,numc); zz = linspace(zl,zr,numr);
@@ -41,11 +39,11 @@ class_stat_M  = reshape(class_stat , size(Y));
 % Force un-filled cells to the brightest color
 class_stat_M (class_stat_M == 0) = max(max(class_stat_M));
 
-% flip image horizontally and vertically水平和垂直翻转图像
+% flip image horizontally and vertically
 Iyz = class_stat_M(end:-1:1,end:-1.:1);
 
 
-%% xy方向投影
+%% 
 xl = min(x); xr = max(x); yl = min(y); yr = max(y);
 xx = linspace(xl,xr,numc); yy = linspace(yl,yr,numr);
 [X,Y] = meshgrid(xx,yy);
@@ -67,10 +65,10 @@ class_stat_M  = reshape(class_stat , size(X));
 % Force un-filled cells to the brightest color
 class_stat_M (class_stat_M == 0) = max(max(class_stat_M));
 
-% flip image horizontally and vertically水平和垂直翻转图像
+% flip image horizontally and vertically
 Ixy = class_stat_M(end:-1:1,end:-1.:1);
 
-%% xz方向投影
+%% 
 xl = min(x); xr = max(x); zl = min(z); zr = max(z);
 xx = linspace(xl,xr,numc); zz = linspace(zl,zr,numr);
 [X,Z] = meshgrid(xx,zz);
@@ -92,7 +90,7 @@ class_stat_M  = reshape(class_stat , size(X));
 % Force un-filled cells to the brightest color
 class_stat_M (class_stat_M == 0) = max(max(class_stat_M));
 
-% flip image horizontally and vertically水平和垂直翻转图像
+% flip image horizontally and vertically
 Ixz = class_stat_M(end:-1:1,end:-1.:1);
 
 %%
