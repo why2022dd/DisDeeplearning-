@@ -1,15 +1,15 @@
 function [ T ] = f_dbscan( A , eps, ppcluster)
 % [ T, eps ] = f_dbscan( A , npb, ppcluster)
-% B¨²squeda de cl¨²sters mediante una b¨²squeda previa de vecinos
-% Aplicaci¨®n del algoritmo DBSCAN
-% Adri¨¢n Riquelme Guill, mayo 2013  
+% BÃºsqueda de clÃºsters mediante una bÃºsqueda previa de vecinos
+% AplicaciÃ³n del algoritmo DBSCAN
+% AdriÃ¡n Riquelme Guill, mayo 2013  
 % Input:
-% - A: matriz con las coordenadas de los puntos ½øÐÐ¾ÛÀàµÄÊý¾Ý¼¯
-% - eps: radio para b¨²squeda de vecinos   °ë¾¶
-% - ppcluster: n m¨ªnimo de puntos por cl¨²ster Ã¿¸öclusterº¬ÓÐµÄ×îÐ¡ÊýÁ¿£¬ÉÙÓÚÕâ¸öÊýÎÒÃÇ±ãÈÏÎª¾ÛÀà³öµÄÕâ¸ö cluster ÓÐµãÐ¡£¬±ãÉ¾³ý
+% - A: matriz con las coordenadas de los puntos è¿›è¡Œèšç±»çš„æ•°æ®é›†
+% - eps: radio para bÃºsqueda de vecinos   åŠå¾„
+% - ppcluster: n mÃ­nimo de puntos por clÃºster æ¯ä¸ªclusterå«æœ‰çš„æœ€å°æ•°é‡ï¼Œå°‘äºŽè¿™ä¸ªæ•°æˆ‘ä»¬ä¾¿è®¤ä¸ºèšç±»å‡ºçš„è¿™ä¸ª cluster æœ‰ç‚¹å°ï¼Œä¾¿åˆ é™¤
 % Output:
-% - T: cl¨²sters asignados a cada vecino T=zeros(n,1); [n,d]=size(A); ËùÒÔTÎª n x 1 ¾ØÕó£¬µÚiiÐÐµÄÄÚÈÝ ±íÊ¾ AÖÐ¶ÔÓ¦ÐÐµÄµã ÊôÓÚÄÄÒ»¸öcluster
-%    Copyright (C) {2015}  {Adri¨¢n Riquelme Guill, adririquelme@gmail.com}
+% - T: clÃºsters asignados a cada vecino T=zeros(n,1); [n,d]=size(A); æ‰€ä»¥Tä¸º n x 1 çŸ©é˜µï¼Œç¬¬iiè¡Œçš„å†…å®¹ è¡¨ç¤º Aä¸­å¯¹åº”è¡Œçš„ç‚¹ å±žäºŽå“ªä¸€ä¸ªcluster
+%    Copyright (C) {2015}  {AdriÃ¡n Riquelme Guill, adririquelme@gmail.com}
 %
 %    This program is free software; you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ function [ T ] = f_dbscan( A , eps, ppcluster)
 %    You should have received a copy of the GNU General Public License along
 %   with this program; if not, write to the Free Software Foundation, Inc.,
 %   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-%    Discontinuity Set Extractor, Copyright (C) 2015 Adri¨¢n Riquelme Guill
+%    Discontinuity Set Extractor, Copyright (C) 2015 AdriÃ¡n Riquelme Guill
 %    Discontinuity Set Extractor comes with ABSOLUTELY NO WARRANTY.
 %    This is free software, and you are welcome to redistribute it
 %    under certain conditions.
@@ -32,50 +32,49 @@ function [ T ] = f_dbscan( A , eps, ppcluster)
 [n,d]=size(A);
 h=waitbar(0,['Cluster analysis in process. ',num2str(n),' points. Please wait']);
 
-minpts=d+1; %minium number of eps-neighbors to consider into a cluster  ÎÒÃÇÈ¡×îÐ¡ÊýÁ¿µÄµãÎª d + 1£»
+minpts=d+1; %minium number of eps-neighbors to consider into a cluster  æˆ‘ä»¬å–æœ€å°æ•°é‡çš„ç‚¹ä¸º d + 1ï¼›
 T=zeros(n,1);   
-maxcluster=1; % µÚÒ»¸öclusterÎª1£¨µÚ1Ààcluster£©
-% 0 sin cl¨²ster asignado
-% 1,2.... cl¨²ster asignado
+maxcluster=1; 
+% 0 sin clÃºster asignado
+% 1,2.... clÃºster asignado
 % calculamos los puntos dentro del radio de eps
 [idx, ~] = rangesearch(A,A,eps);
 for i=1:n
     NeighborPts=idx{i};
-    % si ha encontrado el m¨ªnimo de puntos, hacer lo siguiente
-    % cuidado, el primer ¨ªndice de idx es el mismo punto
+    % si ha encontrado el mÃ­nimo de puntos, hacer lo siguiente
+    % cuidado, el primer Ã­ndice de idx es el mismo punto
     if length(NeighborPts)>=minpts %el punto es un core point
-        % ?el punto tiene cl¨²ster asignado?
-        cv=T(NeighborPts); %cl¨²ster vecinos
-        mincv=min(cv); % cv ÖÐµÄ×îÐ¡Öµ
-        mincv2=min(cv((cv>0))); % ÔÚ cv £¾0 µÄËùÓÐÖµÖÐÈ¡×îÐ¡Öµ
-        maxcv=max(cv);% cv ÖÐµÄ×î´óÖµ
+        % ?el punto tiene clÃºster asignado?
+        cv=T(NeighborPts); %clÃºster vecinos
+        mincv=min(cv); 
+        mincv2=min(cv((cv>0))); 
+        maxcv=max(cv);
         if maxcv==0
-            caso=0; % maxcv==0£¬µÚÒ»ÖÖÇé¿öÕâ¸öµãµÄÁÚ¾Ó¶¼Ã»ÓÐ±»¹éÀà£¬ÎÒÃÇ°ÑÕâÐ©µã¹éµ½maxclusterÖÐ¡£
+            caso=0; 
         else
             if maxcv==mincv2
-                caso=1; % maxcv~=0 && maxcv==mincv2£¬µÚ¶þÖÖÇé¿ö£¬¢ÙÕâ¸öµãµÄÁÚ¾ÓµãÓÐµÄÃ»ÓÐ±»¹éÀà£¬ÓÐµÄ±»¹éÀà£¬²¢ÇÒ±»¹éÀàµÄµã¹éµ½ÁËÍ¬Ò»Àà ¢ÚÕâ¸öµãµÄÁÚ¾ÓµãÈ«²¿ÊôÓÚÍ¬Ò»Àà¡£
+                caso=1;
             else
-                caso=2; % maxcv~=0 && maxcv~=mincv2£¬µÚÈýÖÖÇé¿ö£¬¢ÙÕâ¸öµãµÄÁÚ¾ÓµãÓÐµÄÃ»ÓÐ±»¹éÀà£¬ÓÐµÄ±»¹éÀà£¬²¢ÇÒ±»¹éÀàµÄµã²»ÊôÓÚÍ¬Ò»Àà ¡£
+                caso=2;
             end
         end
         switch caso
             case 0
-                % ning¨²n punto tiene c¨²ster asingado, se lo asignamos
-                T(NeighborPts)=maxcluster; % ¶ÔÓÚÇé¿öÒ»£¬ÎÒÃÇ°ÑËùÓÐµÄÕâ¸öµãµÄÁÚ¾Óµã¹éµ½maxclusterÖÐ£¬²¢ÇÒ maxcluster=maxcluster+1
+                % ningÃºn punto tiene cÃºster asingado, se lo asignamos
+                T(NeighborPts)=maxcluster;
                 % T(i)=maxcluster;
-                maxcluster=maxcluster+1; %
+                maxcluster=maxcluster+1; 
             case 1
                 if mincv==0
-                    % ¶ÔÓÚÇé¿ö¶þ£¬ÎÒÃÇ°ÑÕâ¸öµãµÄ Î´±»¹éÀàÁÚ¾Óµã ¹éµ½ ÒÑ¾­±»¹éÀàµÄÁÚ¾ÓµãµÄÍ¬Àà±ð ÖÐ£¬T(NeighborPts(cv==0))=mincv2;£¨maxcv==mincv2£¬ËùÒÔÁîÆäµÈÓÚmaxcv»¹ÊÇmincv2¶¼ÐÐ£©
+              
                     T(NeighborPts(cv==0))=mincv2;
                 end
                 % T(i)=mincv2;
             case 2
-                %¶ÔÓÚÇé¿öÈý£¬ÎÒÃÇ°Ñ Î´±»¹éÀàÁÚ¾Óµã ¹éÀàµ½ mincv2 ÖÐ£¬¶øÆäËû ÒÑ¾­±»¹éÀàµÄÁÚ¾Óµã ÓÉÓÚ¶¼ÊÇÊôÓÚÕâ¸öµãµÄÁÚ¾Ó£¬ËùÒÔ±¾¸ÃÊÇÍ¬Ò»Àà£¬ËùÒÔÒª±»¹éÀàµ½Í¬Ò»ÀàÀïÃæ£¬
-                %            ²¢ÇÒËùÓÐµÄÒÑ¾­±»¹éÀàµÄÁÚ¾Óµã Ëù´ú±íµÄµÄÀà±ðµÄµãÒ²Òª¹éµ½ÕâÒ»Àà¡£
+              
                 T(NeighborPts(cv==0))=mincv2;
-                % reagrupamos los puntos que ya tienen cl¨²ster
-                b=cv(cv>mincv2); % cl¨²sters a reasignar
+                % reagrupamos los puntos que ya tienen clÃºster
+                b=cv(cv>mincv2); % clÃºsters a reasignar
                 [~,n1]=size(b);
                 aux=0;
                 for j=1:n1
@@ -87,41 +86,41 @@ for i=1:n
                 % T(i)=mincv2;
         end
     else
-        %el punto no tiene suficientes vecinos.Õâ¸öµãÃ»ÓÐ×ã¹»µÄÁÚ¾Ó
+        %el punto no tiene suficientes vecinos.
     end
     waitbar(i/n,h);
 end
 %% homogeneizamos la salida
-% si la salida est¨¢ vac¨ªa, es decir que no se encuentra ning¨²n cluster, no hacemos nada  Èç¹ûÊä³öÎª¿Õ£¬¼´Ã»ÓÐÕÒµ½¼¯Èº£¬Ôò²»Ö´ÐÐÈÎºÎ²Ù×÷
+% si la salida estÃ¡ vacÃ­a, es decir que no se encuentra ningÃºn cluster, no hacemos nada  
 if sum(T)==0 
-    % no hademos nada, la salida est¨¢ vac¨ªa
-    % como todos los puntos tienen valor cero, se eliminar¨¢n despu¨¦s ÎÒÃÇÊ²Ã´¶¼Ã»ÓÐ£¬Êä³öÊÇ¿ÕµÄ£¬ÒòÎªËùÓÐµÄµã¶¼ÊÇÁã£¬ËüÃÇ»á±»É¾³ý¡£
+    % no hademos nada, la salida estÃ¡ vacÃ­a
+    % como todos los puntos tienen valor cero, se eliminarÃ¡n despuÃ©s 
 else
-    % en esta fase cogemos los cl¨²sters obtenidos y eliminamos los que no
+    % en esta fase cogemos los clÃºsters obtenidos y eliminamos los que no
     % superen los N (ppcluster)
-    % se ordenan los cl¨²sters seg¨²n mayor a menor n? de puntos obtenidos
+    % se ordenan los clÃºsters segÃºn mayor a menor n? de puntos obtenidos
     T2=T;
     cluster=unique(T2,'sorted');
-    cluster=cluster(cluster>0); % eliminamos los cl¨²sters ru¨ªdo Ïû³ýÔëÉù¼¯Èº
+    cluster=cluster(cluster>0); % eliminamos los clÃºsters ruÃ­do 
     [ nclusters,~]=size(cluster);
-    % calculamos el n¨²mero de puntos que pertenecen a cada clusterÎÒÃÇ¼ÆËãÊôÓÚÃ¿¸ö¼¯ÈºµÄµãµÄÊýÁ¿
+    % calculamos el nÃºmero de puntos que pertenecen a cada cluster
     A=zeros(2,nclusters);
     numeroclusters=zeros(1, nclusters);
     for ii=1:nclusters
         numeroclusters(ii)=length(find(T2(:,1)==cluster(ii,1)));
     end
-    A(2,:)=cluster; A(1,:)=numeroclusters;   % A µÄµÚ¶þÁÐ±íÊ¾ÄÄÒ»Àà cluster£»µÚÒ»ÁÐ±íÊ¾´ËÐÐµÄ cluster º¬ÓÐ¶àÉÙ¸öµã
-    % ordeno la matriz seg¨²n el n¨²mero de cl¨²sters encontrados
+    A(2,:)=cluster; A(1,:)=numeroclusters;   % 
+    % ordeno la matriz segÃºn el nÃºmero de clÃºsters encontrados
     [~,IX]=sort(A(1,:),'descend'); A=A(:,IX);
-    % buscamos aquellos clusters con m¨¢s de n puntos  ÎÒÃÇÑ°ÕÒÄÇÐ©³¬¹ýn¸öµãµÄ¼¯Èº
+    % buscamos aquellos clusters con mÃ¡s de n puntos  
     n=ppcluster;
     I=find(A(1,:)>n);
     J=find(A(1,:)<=n);
-    % los cl¨²sters no significativos le asingamos le valor 0 ¶ÔÓÚ²»ÖØÒªµÄ¼¯Èº£¬ÎÒÃÇÔÚ T ÖÐ½«ÆäÉèÖÃÎª0
+    % los clÃºsters no significativos le asingamos le valor 0 
     for ii=1:length(J)
         T(T2==A(2,J(ii)))=0;
     end
-    % renombramos los cl¨²sters seg¨²n importancia °´ÖØÒªÐÔÖØÃüÃûcluster
+    % renombramos los clÃºsters segÃºn importancia 
     for ii=1:length(I)
         T(T2==A(2,I(ii)))=ii;
     end
